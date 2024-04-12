@@ -1,0 +1,31 @@
+# name: Testing deployment for walnutv2
+
+# on:
+#   push:
+#     branches: [test/stagingv2]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: AWS SSM Send-Command
+#         uses: peterkimzz/aws-ssm-send-command@master
+#         id: ssm
+#         with:
+#           aws-region: ${{ secrets.AWS_REGION }}
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           instance-ids: ${{ secrets.AWS_INSTANCE_ID }}
+
+#           working-directory: /home/ubuntu/walnuteqv2-testenv/WalnutEQ2.0
+#           comment: Initiating build and deploy
+#           command: |
+#             sudo -u ubuntu git pull origin test/stagingv2 > /tmp/debug-log-git.log
+#             sudo -u ubuntu make deploy > /tmp/debug-log-deploy.log
+
+#       # Catch SSM outputs
+#       - name: Get the deploy outputs
+#         run: echo "check /tmp/debug-log-git.log /tmp/debug-log-deploy.log"

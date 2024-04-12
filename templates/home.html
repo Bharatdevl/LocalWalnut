@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+{%extends 'base.html'%}
+{% load static %}
+{%block content%}
+<html lang="en">
+<head>
+
+</head>
+
+<body>
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap" class="home-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-2">
+                            <form method="get"  id="filter_form" action="{% url 'entity_users:client_welcome' %}">
+                                <div class="d-flex justify-content-start mb-3 ">
+                                <select name="filter" id="select_filter_form"  onchange="filterData()" class="btn btn-primary form-select " style="background-color: orange; padding: 10px;">
+                                  <option value="" disabled selected hidden>Filter</option>
+                                  <option value="3">Last 3 months</option>
+                                  <option value="6">Last 6 months</option>
+                                  <option value="9">Last 9 months</option>
+                                  <option value="12">Last 1 year</option>
+                                </select>
+
+                            </div>
+                            </form>
+                    </div>
+                    </div>
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-xl-9 mb-5">
+                                        <div class="card-txt">
+                                            <h3>Survey Summery</h3>
+                                        </div>
+                                        <div class="card-box">
+                                            <div id="line-chartContainer"
+                                                style="height: 250px; width: 100%; margin: auto;"></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-12 col-xl-3 mr-bot">
+                                        <div class="card-txt">
+                                            <h3>Utilization</h3>
+                                        </div>
+                                        <div class="card-box">
+                                            <div id="pie-chartContainer"
+                                                style="height: 250px; width: 100%; margin: auto;"></div>
+                                                <div id="toolTipContent"></div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-12 col-xl-11">
+                        <div class="card home-table">
+                            <div class="table-responsive">
+
+                                <!-- <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Question</th>
+                                            <th scope="col">Average</th>
+                                            <th scope="col">Change</th>
+                                            <th scope="col">Last date collected</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in question_obj1 %}
+                                        <tr>
+                                            <td>{{ i.name }}</td>
+                                            <td>
+                                                {{ i.rating }}
+                                            </td>
+                                            <td><i class="fa-solid fa-arrow-up"></i></td>
+                                            <td>{{ i.created_at }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table> -->
+
+
+                                <table class="table" id="filtered-data-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Question</th>
+                                            <th scope="col">Average</th>
+                                            <th scope="col">Change</th>
+                                            <th scope="col">Last date collected</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+<!-- <script type="text/javascript" src="{% static 'js/month_load.js' %}"></script> -->
+<script>
+    var lineChart;
+    var pieChart;
+    var addedQuestions = []; // Keep track of added questions
+
+
+     // Define an array of unique colors for questions
+     var questionColors = [
+        "#0b0fe3",
+        "#069e27",
+        "#f76700",
+        "#ed05ed",
+        "#fc0a7f",
+        "#918183",
+        "#361a1d"
+
+        // Add more unique colors as needed
+    ];
+
+    function filterData() {
+
+    var MonthID = document.getElementById("select_filter_form").value;
+
+    // Check if the selected MonthID is less than or equal to 3 (last 3 months)
+    var isWeekly = parseInt(MonthID) == 3;
+
+
+    $.ajax({
+      url: "{% url 'entity_users:filter-data' %}" ,
+      method: 'GET',
+      data: {
+        'month_id': MonthID ? MonthID : 3
+      },
+
+      success: function (result) {
+        console.log(result.line_chart_data,"line_chart_data")
+        console.log(result.table_data,"table_data")
+        console.log(result.utilization_data ,"utilization_data")
+
+        var colorIndex = 0;
+        // """  show average , question and change and LastDateCollected on the table from backend   """
+        $.each(result.table_data, function (key, value) {
+            var Question = value.name;
+            var Average = value.last_avg_rating !== null ? value.last_avg_rating : "-";
+            var CurrentAverage = value.current_avg_rating !== null ? value.current_avg_rating : "-";
+            var LastDateCollected = value.send_timestamp ? value.send_timestamp : "";
+
+        // Check if the question has already been added
+        if (addedQuestions.includes(Question)) {
+            return; // Skip this iteration
+        }
+        // Add the question to the list of added questions
+        addedQuestions.push(Question);
+
+        if (CurrentAverage !== "-" && Average !== "-") {
+                    if (CurrentAverage > Average) {
+                        arrowIcon = "<i class='fa-solid fa-arrow-up'></i>";
+                    } else if (CurrentAverage < Average) {
+                        arrowIcon = "<i class='fa-solid fa-arrow-down'></i>";
+                    } else {
+                        arrowIcon = "<i class='fa-solid fa-arrow-up'></i>";
+                    }
+                } else {
+                    arrowIcon = "-";
+                }
+
+                 var questionColor = questionColors[colorIndex] || "#951638"; // Default to black if no color is found
+
+                // Set the question text color to match the line chart color
+                var bulletHTML = "<span style='display: inline-block; text-align: center; vertical-align: middle; font-size: 36px; width: 1em; height: 1em; line-height: 1em; margin-right: 0.5em; color:" + questionColor + ";'>&#8226;</span>"; // Bullet point with the color, centered
+
+                // Add the bullet point in front of the question on a new line
+                var questionHTML = bulletHTML + Question;
+
+            $("tbody").append(
+                "<tr><td>" + questionHTML + "</td><td>" + Average + "</td><td>" + arrowIcon + "</td><td>" + LastDateCollected + "</td></tr>"
+            );
+            colorIndex = (colorIndex + 1) % questionColors.length;
+            });
+
+                var toolTipContent = document.getElementById("toolTipContent");
+                toolTipContent.innerHTML = result.utilization_data[0].avg_opted_employees*100 + " %";
+
+
+                // var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                // var dataSeries = {};
+                // var weeks = ["Week 1", "Week 2", "Week 3", "Week 4","Week 5"];
+
+                // result.line_chart_data.forEach(function (item) {
+                //     var question = item.question;
+                //     var week = weeks[item.week - 1]; // Subtract 1 to match the index of the weeks array
+                //     var rating = item.rating;
+                //     var month=item.month;
+
+                //     if (!dataSeries[question]) {
+                //         dataSeries[question] = {
+                //             type: "line",
+                //             name: question,
+                //             dataPoints: []
+                //         };
+                //     }
+
+                //     dataSeries[question].dataPoints.push({ y: rating, label: week + " " +month});
+                // });
+
+                // var seriesData = [];
+
+                // for (var question in dataSeries) {
+                //     seriesData.push(dataSeries[question]);
+                // }
+
+                // lineChart.options.axisX.labels = weeks; // Set weeks as the labels for the x-axis
+                // lineChart.options.data = seriesData;
+                // lineChart.render();
+
+
+                // // Define months array
+                // var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+                // var dataSeries = {};
+
+                // // When processing line chart data, assign colors to questions based on the predefined scheme
+                // // Define an index to track the current color
+                // var colorIndex = 0;
+
+                // // When processing line chart data, assign unique colors to questions
+                // result.line_chart_data.forEach(function (item) {
+                //     var question = item.question;
+                //     var monthYearLabel = item.month + " " + item.year;
+                //     var rating = item.rating;
+
+                //     if (!dataSeries[question]) {
+                //         dataSeries[question] = {
+                //             type: "line",
+                //             name: question,
+                //             color: questionColors[colorIndex], // Assign a unique color to the question
+                //             dataPoints: []
+                //         };
+
+                //         colorIndex = (colorIndex + 1) % questionColors.length; // Move to the next color
+                //     }
+
+                //     dataSeries[question].dataPoints.push({ y: rating, label: monthYearLabel });
+                // });
+
+                // var seriesData = [];
+
+                // for (var question in dataSeries) {
+                //     seriesData.push(dataSeries[question]);
+                // }
+
+                // lineChart.options.axisX.labels = months.map(function(month, index) {
+                //     return months[index] + " " + result.line_chart_data[index].year; // Combine month and year for the x-axis labels
+                // });
+
+                // lineChart.options.axisX.interval = 1; // Show every label
+                // lineChart.options.data = seriesData;
+                // lineChart.render();
+
+                //=======================================================================================================
+
+                 // Define labels and dataPoints arrays for line chart
+                 var labels = [];
+                var dataPoints = [];
+
+                if (isWeekly) {
+
+                var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                var dataSeries = {};
+                var weeks = ["Week 1", "Week 2", "Week 3", "Week 4","Week 5"];
+
+                result.line_chart_data.forEach(function (item) {
+                    var question = item.question;
+                    var week = weeks[item.week - 1]; // Subtract 1 to match the index of the weeks array
+                    var rating = item.rating;
+                    var month=item.month;
+
+                    if (!dataSeries[question]) {
+                        dataSeries[question] = {
+                            type: "line",
+                            name: question,
+                            dataPoints: []
+                        };
+                    }
+
+                    dataSeries[question].dataPoints.push({ y: rating, label: week + " " +month});
+                });
+
+                var seriesData = [];
+
+                for (var question in dataSeries) {
+                    seriesData.push(dataSeries[question]);
+                }
+
+                lineChart.options.axisX.labels = weeks; // Set weeks as the labels for the x-axis
+                lineChart.options.data = seriesData;
+                lineChart.render();
+
+                } else {
+                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+                    var dataSeries = {};
+
+                    // When processing line chart data, assign colors to questions based on the predefined scheme
+                    // Define an index to track the current color
+                    var colorIndex = 0;
+
+                    // Create a dictionary to store data for each year
+                    var yearData = {};
+
+                    // When processing line chart data, assign unique colors to questions
+                    result.line_chart_data.forEach(function (item) {
+                        var question = item.question;
+                        var monthYearLabel = item.month + " " + item.year;
+                        var rating = item.rating;
+
+                        if (!dataSeries[question]) {
+                            dataSeries[question] = {
+                                type: "line",
+                                name: question,
+                                color: questionColors[colorIndex], // Assign a unique color to the question
+                                dataPoints: []
+                            };
+
+                            colorIndex = (colorIndex + 1) % questionColors.length; // Move to the next color
+                        }
+
+                        dataSeries[question].dataPoints.push({ y: rating, label: monthYearLabel });
+
+                        // Store data for each year to prevent duplicate months within the same year
+                        if (!yearData[item.year]) {
+                            yearData[item.year] = new Set();
+                        }
+                        yearData[item.year].add(item.month);
+                    });
+
+                    var seriesData = [];
+
+                    for (var question in dataSeries) {
+                        seriesData.push(dataSeries[question]);
+                    }
+
+                    // Generate x-axis labels by iterating through years and months
+                    var xAxisLabels = [];
+                    for (var year in yearData) {
+                        for (var month of months) {
+                            if (yearData[year].has(month)) {
+                                xAxisLabels.push(month + " " + year);
+                            }
+                        }
+                    }
+
+                    lineChart.options.axisX.labels = xAxisLabels;
+                    lineChart.options.axisX.interval = 1; // Show every label
+                    lineChart.options.data = seriesData;
+                    lineChart.render();
+
+                }
+
+                // lineChart.options.axisX.labels = labels;
+                // lineChart.options.axisX.interval = 1; // Show every label
+                // lineChart.options.data = seriesData;
+                // lineChart.render();
+
+
+                // function to populate data in pieChart show opted employee average on frontend
+                function populatePieChartData(chart, data) {
+                    var dataPoints = chart.options.data[0].dataPoints;
+                    dataPoints.length = 0; // clear the existing data points
+
+                    // populate the data points array with new data
+                    for (var i = 0; i < data.length; i++) {
+                        dataPoints.push({ y: data[i].value, label: data[i].label });
+                    }
+
+                    chart.render(); // render the chart with updated data points
+                }
+
+                avg_opted_employees=result.utilization_data[0].avg_opted_employees
+
+                var data = [
+
+                    { label: "", value: avg_opted_employees * 100},
+                    // { label: "Not Opted Employees", value: result.utilization_data[0].avg_not_opted_employees },
+                ];
+
+                populatePieChartData(pieChart, data);
+
+
+
+}
+    });
+}
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{static  'js/canvas/lineChart.js' }"></script>
+
+</body>
+
+</html>
+{%endblock%}

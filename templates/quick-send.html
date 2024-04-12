@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{%extends 'base.html'%}
+{% load static %}
+{%block content%}
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <!-- <div class="top-btn">
+                    <button class="btn back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div> -->
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title">Send SMS</h2>
+                                <form method="post" action="{% url 'surveyqas:sendsms' %}">
+                                    {% csrf_token %}
+                                    <div class="col-12 col-xl-8">
+                                        <div class="row">
+                                            <div class="col-12 col-md-10">
+                                                <div class="input-group">
+                                                    {% if employee_obj %}
+
+                                                    <select class="form-select" name="ph_no">
+                                                        <option selected>Employee phone numbers</option>
+                                                        {% for data in employee_obj %}
+                                                        <option value="{{data.phone_number}}">{{ data.phone_number }}</option>
+                                                        {% endfor %}
+                                                      </select>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-10">
+                                                {% if question_obj %}
+                                                <div class="input-group">
+                                                    <select class="form-select" name="ques">
+                                                        <option selected>Survey questions</option>
+                                                        {% for data in question_obj %}
+                                                        <option value="{{data.name}}">{{ data.name }}</option>
+                                                        {% endfor %}
+                                                      </select>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-12 col-md-5 col-xl-3">
+                                                <div class="input-group">
+                                                    <button class="btn btn-primary">Send</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+{% endblock %}
+</html>

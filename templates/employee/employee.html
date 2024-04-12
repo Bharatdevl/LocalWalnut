@@ -1,0 +1,224 @@
+{% extends 'layouts/dashboard.html' %}
+{% block main_content %}
+<div class="page-wrap">
+    <div id="page-content-wrap" class="home-wrap">
+        <!-- Main page content -->
+        <div class="main-wrap">
+            <!-- <div class="top-btn">
+                <button class="btn back-btn">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back
+                </button>
+            </div> -->
+            {% include 'includes/messages.html' %}
+            <div class="container-fluid">
+                <div class="col-12 col-xl-12">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-5 col-6">
+                                <div class="search-box">
+                                    <form method="get" action="#">
+                                        <input type="text" class="form-control" placeholder="Search User by First name or Last name" name="search">
+                                        <button class="btn"><i class="fa fa-search"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-md-4 offset-md-3 col-6">
+                                <div class="d-flex gap-2 justify-content-end">
+                                    <div class="">
+                                        <a class="btn btn-outline-secondary lt-2" href="{% url 'employee:add_emp' %}"><strong style="font-weight: bold;">Add employee</strong></a>
+                                    </div>
+                                    <div class="">
+                                        <a class="btn btn-outline-secondary lt-2" href="{% url 'employee:upload_files' %}"><strong style="font-weight: bold;">Batch upload</strong></a>
+                                    </div>
+                                   <div class="">
+                                        <a class="btn btn-outline-secondary  lt-2" href="{% url 'employee:download_all_employees_csv' %}"><strong style="font-weight: bold;">Sample CSV</strong></a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="card emp-table">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">First name</th>
+                                            <th scope="col">Last name</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Phone number</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if show_all %}
+
+                                        <!-- Display Admin and Staff data -->
+                                    {% for entry in company_admin %}
+                                    <tr>
+                                        <td>{{ entry.first_name }}</td>
+                                        <td>{{ entry.last_name }}</td>
+                                        <td>{{ entry.email }}</td>
+                                        <td>{{ entry.phone_number }}</td>
+                                        <td>
+                                            <div class="icon-box">
+                                                {% if entry.access_role == "company_admin" %}
+                                                <span>{{ 'Admin' }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    {% for entry in company_staff %}
+                                    <tr>
+                                        <td>{{ entry.first_name }}</td>
+                                        <td>{{ entry.last_name }}</td>
+                                        <td>{{ entry.email }}</td>
+                                        <td>{{ entry.phone_number }}</td>
+                                        <td>
+                                            <div class="icon-box">
+                                                {% if entry.access_role == "company_staff" %}
+                                                <span>{{ 'Staff' }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                        <!-- Display Employee data -->
+                                        {% for i in emp_data %}
+                                        <tr>
+                                            <td>{{i.first_name}}</td>
+                                            <td>{{i.last_name}}</td>
+                                            <td>{{i.email}}</td>
+                                            <td>{{i.phone_number}}</td>
+                                            <td>
+                                                <div class="icon-box">
+                                                    <a href="{% url 'employee:edit_employee' i.id %}"><i
+                                                            class="fa-solid fa-pen-to-square edit"></i></a>
+                                                            <a href="{% url 'employee:delete_employee' pk=i.pk %}" class="curs-point" data-bs-toggle="modal" data-bs-target="#deleteEmployeeBackdrop" id="deleteEmployeeBackdrop{{ i.pk }}"><i class="fa-solid fa-trash-can del"></i></a>
+
+                                                            {% include 'modal/link_emp_deleted_modal.html' with modal_id='deleteEmployeeBackdrop' %}
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        {% endfor %}
+                                    {% else %}
+                                    <!-- Display Admin and Staff data -->
+                                    {% for entry in company_admin %}
+                                    <tr>
+                                        <td>{{ entry.first_name }}</td>
+                                        <td>{{ entry.last_name }}</td>
+                                        <td>{{ entry.email }}</td>
+                                        <td>{{ entry.phone_number }}</td>
+                                        <td>
+                                            <div class="icon-box">
+
+                                                {% if entry.access_role == "company_admin" %}
+                                                   <span>{{ 'Admin' }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    {% for entry in company_staff %}
+                                    <tr>
+                                        <td>{{ entry.first_name }}</td>
+                                        <td>{{ entry.last_name }}</td>
+                                        <td>{{ entry.email }}</td>
+                                        <td>{{ entry.phone_number }}</td>
+                                        <td>
+                                            <div class="icon-box">
+
+                                                {% if entry.access_role == "company_staff" %}
+                                                <span>{{ 'Staff' }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    <!-- Display Employee data -->
+                                    {% for i in emp_data %}
+                                    <tr>
+                                        <td>{{i.first_name}}</td>
+                                        <td>{{i.last_name}}</td>
+                                        <td>{{i.email}}</td>
+                                        <td>{{i.phone_number}}</td>
+                                        <td>
+                                            <div class="icon-box">
+                                                <a href="{% url 'employee:edit_employee' i.id %}"><i class="fa-solid fa-pen-to-square edit"></i></a>
+                                                <a href="{% url 'employee:delete_employee' pk=i.pk %}" class="curs-point" data-bs-toggle="modal" data-bs-target="#deleteEmployeeBackdrop" id="deleteEmployeeBackdrop{{ i.pk }}"><i class="fa-solid fa-trash-can del"></i></a>
+
+                                                {% include 'modal/link_emp_deleted_modal.html' with modal_id='deleteEmployeeBackdrop' %}
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+                                {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="page-box">
+                            <nav aria-label="...">
+                            {% if show_all %}
+                                <a href="{% url 'employee:employee_home' %}" class="page-link  d-flex justify-content-center align-items-center m-auto" style="width: 80px;" >
+                                    <i class="fa-solid fa-arrow-left"   ></i>
+                                    <span class="ps-2" >Back</span>
+                                </a>
+                            {% endif %}
+
+                          {% if emp_data.has_other_pages %}
+                            <ul class="pagination">
+                                {% if emp_data.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link arrow" href="?page={{ emp_data.previous_page_number }}" aria-label="Previous">
+                                            <i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled" aria-label="Previous"></li>
+                                {% endif %}
+
+                                {% for i in emp_data.paginator.page_range %}
+                                    {% if emp_data.number == i %}
+                                        <li class="page-item active" aria-current="page">
+                                            <span class="page-link">{{ i }}</span>
+                                        </li>
+                                    {% elif i == emp_data.number|add:"-2" or i == emp_data.number|add:"-1" or i == emp_data.number or i == emp_data.number|add:"1" or i == emp_data.number|add:"2" %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if emp_data.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link arrow" href="?page={{ emp_data.next_page_number }}" aria-label="Next">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled" aria-label="Next"></li>
+                                {% endif %}
+
+                                {% if emp_data.has_other_pages %}
+
+                                <a href="?show_all=true" class="page-link" style="width: 70px ;">See All</a>
+
+                               {% endif %}
+                            </ul>
+                        {% endif %}
+
+                          </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_content %}

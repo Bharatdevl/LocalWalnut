@@ -1,0 +1,33 @@
+{% load static %}
+<div class="modal fade" id="{{ modal_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" caller-id=""
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="{% static 'images/delete.png'%}" alt="delete"/>
+                <h1>Are you sure?</h1>
+                <p>Do you really want to delete the record? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" id="confirmDeleteModal">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).off('click', '.curs-point').on('click', '.curs-point', function (event) {
+        event.stopPropagation();
+        var id = $(this).attr("id");
+        console.log('Delete button clicked for Curriculum with ID:', id);
+        $("#{{ modal_id }}").attr("caller-id", id);
+    });
+
+    $(document).off('click', '#confirmDeleteModal').on('click', '#confirmDeleteModal', function () {
+        var caller = $("#{{ modal_id }}").attr("caller-id");
+        console.log('Confirm delete button clicked for Curriculum with ID:', caller);
+        window.location = $("#" + caller).attr("href");
+    });
+</script>

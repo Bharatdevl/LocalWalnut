@@ -1,0 +1,123 @@
+{% extends 'layouts/dashboard.html' %}
+{% load static %}
+
+{% block css_content %}
+<style>
+    select option {
+        font-weight: 200 !important;
+        background-color: #edf1f2 !important;
+        color: #403939 !important;
+    }
+    .custom-width {
+    width: calc((25% + 1.5%) - 1rem);
+}
+    #toolTipContent{
+  user-select: none;
+  position: absolute;
+  top: 40px;
+  left: 9px;
+  right: 0;
+  margin: auto;
+  bottom: 80px;
+  text-align: center;
+  height: 0%;
+  width: 30%;
+  font-size: 20px;
+}
+
+
+</style>
+{% endblock css_content %}
+
+{% block main_content %}
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap" class="home-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-2">
+                            <form method="get"  id="filter_form" action="{% url 'dashboard:home' %}">
+                                <div class="d-flex justify-content-start mb-3 ">
+                                <select name="filter" id="select_filter_form"  onchange="filterData()" class="btn btn-primary form-select" style="background-color: orange; padding: 10px;">
+                                  <option value="" disabled selected hidden>Filter by Month</option>
+                                  <option value="3">Last 3 months</option>
+                                  <option value="6">Last 6 months</option>
+                                  <option value="9">Last 9 months</option>
+                                  <option value="12">Last 1 year</option>
+                                </select>
+
+                            </div>
+                            </form>
+                    </div>
+                    </div>
+
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-xl-9 mb-5">
+                                        <div class="card-txt text-center">
+                                            <h3>Survey Summary</h3>
+                                        </div>
+                                        <div class="card-box d-flex align-items-center justify-content-center">
+                                            <div id="line-chartContainer" style="height: 250px; width: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-xl-3 mr-bot">
+                                        <div class="card-txt text-center">
+                                            <h3>Utilization</h3>
+                                        </div>
+                                        <div class="card-box d-flex align-items-center justify-content-center">
+                                            <div id="pie-chartContainer" style="height: 250px; width: 100%;"></div>
+                                            <div id="toolTipContent"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-12">
+                        <div class="card home-table">
+                            <div class="table-responsive">
+                                <table class="table" id="filtered-data-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Question</th>
+                                            <th scope="col">Average</th>
+                                            <th scope="col">Change</th>
+                                            <th scope="col">Last date collected</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!-- Loading caption -->
+            <div id="loading-caption">
+                <div class="spinner">
+
+                </div>
+            </div>
+    </div>
+{% endblock main_content %}
+
+{% block js_content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<script>
+    var filterDataURL = "{% url 'dashboard:filter_data' %}";
+</script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock js_content %}

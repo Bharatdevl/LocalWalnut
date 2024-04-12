@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+{%extends 'base.html'%}
+{%block content%}
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap" class="home-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <!-- <div class="top-btn">
+                    <button class="btn back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div> -->
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div>
+                            <div class="d-flex justify-content-end">
+                                <div>
+                                    <a class="btn btn-primary lt-2" href="{% url 'surveyqas:add_questions' %}">Add Questions</a>
+                                </div>
+                            </div>
+                            {% if question_obj %}
+                            <div class="card qa-table">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Questions</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for i in question_obj %}
+                                            <tr>
+                                                <td>{{ i.name }}</td>
+                                                <td>
+
+                                                    <div class="icon-box">
+                                                        <a href="{% url 'surveyqas:edit_surveyqa' i.id %}">
+                                                            <i class="fa-solid fa-pen-to-square edit"></i></a>
+                                                        <a href="{% url 'surveyqas:deleteqa' i.id %}" class="curs-point" data-bs-toggle="modal" data-bs-target="#deleteBackdrop" id="deleteButton{{i.id}}"><i
+                                                                class="fa-solid fa-trash-can del"></i></a>
+                                                        {% include 'modal/link_emp_deleted_modal.html' %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="page-box">
+                                <nav aria-label="Page navigation">
+                                    {% if question_obj.has_other_pages %}
+                                <ul class="pagination">
+                                  {% if question_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link arrow" href="?page={{ question_obj.previous_page_number }}" aria-label="Previous">
+                                                <i class="fa-solid fa-angle-left"></i>
+                                  {% else %}
+                                    <li class="page-item disabled"  aria-label="Previous"></li>
+                                  {% endif %}
+
+                                  {% for i in question_obj.paginator.page_range %}
+                                    {% if question_obj.number == i %}
+                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ i }}</a></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                  {% endfor %}
+
+                                  {% if question_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link arrow" href="?page={{ question_obj.next_page_number }}" aria-label="Next">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a></li>
+                                  {% else %}
+                                    <li class="page-item disabled" aria-label="Next"></li>
+                                  {% endif %}
+                                </ul>
+                              {% endif %}
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+{% endblock %}

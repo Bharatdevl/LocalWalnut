@@ -1,0 +1,59 @@
+name: walnuteq pytest
+
+on: [push]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:latest
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: pass123
+                    POSTGRES_DB: walnuteq
+                ports:
+                    - 5432:5432
+                options: --health-cmd pg_isready --health-interval 10s --health-timeout 10s --health-retries 5
+        env:
+          DBNAME: walnuteq
+          DBUSER: postgres
+          DBPASSWORD: pass123
+          DBHOST: 127.0.0.1
+          DBPORT: 5432
+          SECRETKEY: ${{secrets.APP_SECRETKEY}}
+          DEPLOY_PRODUCTION: false
+          ALLOWED_HOST: http://demo.walnuteq.com,http://app.walnuteq.com
+          CSRF_TRUSTED_ORIGINS: http://app.walnuteq.com,http://127.0.0.1:8004
+          CELERY_BROKER: redis://redisdb:6379/0
+          LOGIN_URL: http://app.walnuteq.com/
+          LOGOUT_REDIRECT_URL: http://app.walnuteq.com/
+          TIME_ZONE: Asia/Calcutta
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python 3.8
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.8'
+                architecture: 'x64'
+            - name:  psycopg2 prerequsites
+              run: sudo apt-get install libpq-dev
+            - name: install dependencies
+              run: |
+                pip install poetry
+                poetry install
+            - name: checking environment variables
+              run: echo $SECRETKEY
+            - name: migrate db
+              run: |
+                mkdir company/migrations && touch company/migrations/__init__.py
+                mkdir employee/migrations && touch employee/migrations/__init__.py
+                mkdir services/migrations && touch services/migrations/__init__.py
+                mkdir scheduler/migrations && touch scheduler/migrations/__init__.py
+                mkdir survey/migrations && touch survey/migrations/__init__.py
+                mkdir curriculum/migrations && touch curriculum/migrations/__init__.py
+                mkdir dashboard/migrations && touch dashboard/migrations/__init__.py
+                poetry run python manage.py makemigrations
+                poetry run python manage.py migrate
+            - name: running pytest
+              run: poetry run pytest -v --sw

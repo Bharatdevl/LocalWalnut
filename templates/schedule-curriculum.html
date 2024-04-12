@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+{%extends 'base.html'%}
+{% load static %}
+{%block content%}
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap" class="home-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <!-- <div class="top-btn">
+                    <button class="btn back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div> -->
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div>
+                            <div class="d-flex justify-content-between">
+                                <div class="search-box">
+                                    <input type="text" class="form-control"
+                                        placeholder="Search...">
+                                    <button class="btn"><i class="fa fa-search"></i></button>
+                                </div>
+                                <div>
+                                    <a class="btn btn-primary lt-2" href="{% url 'curriculum_app:add-curriculum' %}">Schedule Curriculum</a>
+                                </div>
+                            </div>
+                            <div class="card emp-table">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+
+                                                <th scope="col">Weekday</th>
+                                                <th scope="col">Time</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% if show_all %}
+                                                {% for i in schedule_obj %}
+                                                <tr>
+                                                    <td>{{ i.weekday }}</td>
+                                                    <td>{{ i.schedule_time|time:"g:iA" }}</td>
+                                                    <td>
+                                                        <div class="icon-box">
+                                                            <a href="{% url 'curriculum_app:edit_curriculum' i.id %}">
+                                                                <i class="fa-solid fa-pen-to-square edit"></i>
+                                                            </a>
+                                                            <a href="{% url 'curriculum_app:delete_curriculum' i.id %}" class="curs-point"
+                                                                data-bs-toggle="modal" data-bs-target="#deleteBackdrop" id="deleteButton{{i.id}}">
+                                                                <i class="fa-solid fa-trash-can del"></i>
+                                                            </a>
+                                                            {% include 'modal/link_emp_deleted_modal.html' %}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="4">No Curriculum schedules found.</td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                {% for i in schedule_obj %}
+                                                <tr>
+                                                    <td>{{ i.weekday }}</td>
+                                                    <td>{{ i.schedule_time|time:"g:iA" }}</td>
+                                                    <td>
+                                                        <div class="icon-box">
+                                                            <a href="{% url 'curriculum_app:edit_curriculum' i.id %}">
+                                                                <i class="fa-solid fa-pen-to-square edit"></i>
+                                                            </a>
+                                                            <a href="{% url 'curriculum_app:delete_curriculum' i.id %}" class="curs-point"
+                                                                data-bs-toggle="modal" data-bs-target="#deleteBackdrop" id="deleteButton{{i.id}}">
+                                                                <i class="fa-solid fa-trash-can del"></i>
+                                                            </a>
+                                                            {% include 'modal/link_emp_deleted_modal.html' %}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="4">No Curriculum schedules found.</td>
+                                                </tr>
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        </tbody>
+
+
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="page-box">
+
+                                <nav aria-label="Page navigation">
+
+                                    {% if show_all %}
+                                    <a href="{% url 'curriculum_app:curriculum_save' %}" class="page-link  d-flex justify-content-center align-items-center m-auto" style="width: 80px;" >
+                                        <i class="fa-solid fa-arrow-left"   ></i>
+                                        <span class="ps-2" >Back</span>
+                                    </a>
+                                    {% endif %}
+                                    {% if schedule_obj.has_other_pages %}
+                                <ul class="pagination">
+                                  {% if schedule_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link arrow" href="?page={{ schedule_obj.previous_page_number }}" aria-label="Previous">
+                                                <i class="fa-solid fa-angle-left"></i>
+                                  {% else %}
+                                    <li class="page-item disabled"  aria-label="Previous"></li>
+                                  {% endif %}
+
+                                  {% for i in schedule_obj.paginator.page_range %}
+                                    {% if schedule_obj.number == i %}
+                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ i }}</a></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                  {% endfor %}
+
+                                  {% if schedule_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link arrow" href="?page={{ schedule_obj.next_page_number }}" aria-label="Next">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a></li>
+                                  {% else %}
+                                    <li class="page-item disabled" aria-label="Next"></li>
+                                  {% endif %}
+                                  {% if schedule_obj.has_other_pages %}
+
+                                  <a href="?show_all=true" class="page-link" style="width: 70px ;">See All</a>
+
+                                 {% endif %}
+                                </ul>
+                              {% endif %}
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+</html>

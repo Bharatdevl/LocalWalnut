@@ -1,0 +1,108 @@
+{% extends 'layouts/dashboard.html' %}
+{% block main_content %}
+<div class="page-wrap">
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <div id="page-content-wrap">
+        <!-- Header -->
+        <div id="header"></div>
+        {% include 'includes/messages.html' %}
+        <!-- Main page content -->
+        <div class="main-wrap">
+            <div class="container-fluid">
+                <div class="col-12 col-xl-11">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Edit Employees</h2>
+                            <form action="{% url 'employee:edit_employee' emp_data.pk %}" method="post">
+                                {% csrf_token %}
+
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        <ul class="errorlist">
+                                            {% for error in field.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="col-12 col-xl-8">
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text"  name="first_name" value="{{emp_data.first_name|default_if_none:''}}"
+                                                    id="firstname" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text"  name="last_name" value="{{emp_data.last_name|default_if_none:''}}"
+                                                    id="last_name" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Email</label>
+                                                <input type="text" name="email" value="{{emp_data.email|default_if_none:''}}"
+                                                    id="email" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Phone Number</label>
+                                                <input type="number"  name="phone_number" value="{{emp_data.phone_number|default_if_none:''}}"
+                                                    id="phone_number" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Department</label>
+                                                <input type="text"  name="department" value="{{emp_data.department|default_if_none:''}}"
+                                                    id="department" class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Supervisor</label>
+                                                <input type="text"  name="supervisor" value="{{emp_data.supervisor|default_if_none:''}}"
+                                                    id="supervisor" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Location</label>
+                                                <input type="text"  name="location" value="{{emp_data.location|default_if_none:''}}"
+                                                    id="location" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group d-flex ">
+                                            <button class="btn btn-primary btn-sm me-3" style="width: 120px;">Save</button>
+                                            <a href="{% url 'employee:delete_employee' emp_data.pk %}" class="curs-point" data-bs-toggle="modal" data-bs-target="#deleteEmployeeBackdrop" id="deleteEmployeeBackdrop{{emp_data.pk}}">
+                                                <button type="button" class="btn btn-secondary me-3" style="width: 120px;">Delete</button>
+                                            </a>
+                                            {% include 'modal/link_emp_deleted_modal.html' with modal_id='deleteEmployeeBackdrop' %}
+                                        </div>
+                                        <!-- <div class="col-12 col-md-5 col-xl-5"><br><br><br><br><br><br>
+                                            <div class="form-group d-flex justify-content-between">
+                                                <button class="btn btn-primary me-3">Save</button>
+                                                <a href="{% url 'employee:delete_employee' emp_data.pk %}" class="curs-point" data-bs-toggle="modal" data-bs-target="#deleteEmployeeBackdrop" id="deleteEmployeeBackdrop{{emp_data.pk}}">
+                                                    <button type="button" class="btn btn-secondary me-3">Delete</button>
+                                                </a>
+                                                {% include 'modal/link_emp_deleted_modal.html' with modal_id='deleteEmployeeBackdrop' %}
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

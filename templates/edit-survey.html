@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% extends 'layouts/dashboard.html' %}
+{% load static %}
+{% block main_content %}
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <!-- <div class="top-btn">
+                    <button class="btn back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div> -->
+                {% include 'includes/messages.html' %}
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title">Edit Questions</h2>
+                                <form method="post" action="{% url 'survey:edit_question' question_obj.id %}">
+                                    {% csrf_token %}
+                                    <div class="col-12 col-xl-8">
+                                        <div class="row">
+                                            <div class="col-12 col-md-12">
+                                                <div class="input-group">
+                                                    <input type="text" placeholder="Edit your questions here..." name="question"
+                                                        id="firstname" value="{{ question_obj.question }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 col-xl-3">
+                                            <div class="input-group">
+                                                <button class="btn btn-primary">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
+{% endblock main_content %}

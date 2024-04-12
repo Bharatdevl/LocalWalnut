@@ -1,0 +1,33 @@
+{% load static %}
+{% block css_content %}
+<style>
+.bold-text {
+    font-weight: 500; /* Make text bold */
+}
+
+</style>
+
+{% endblock css_content %}
+<!--sidebar-->
+<div class="side-card menu-trans" id="sidebar-wrapper">
+    <!-- <button class="btn menu-btn" onclick="closeMenu()">
+        <i class="fa-solid fa-xmark"></i>
+    </button> -->
+    <div class="side-icon">
+        <img class="s-logo" src="{%static 'images/SidebarLogo.png'%}" alt="logo" />
+    </div>
+    <div class="list-group">
+        <a class="list-item list-action bold-text" href="{% url 'dashboard:home' %}">Home</a>
+        {% if user.is_authenticated and user.companyusers.access_role == "company_admin" %}
+            <a class="list-item list-action bold-text" href="{% url 'company:add_user' %}">Add Admin</a>
+        {% endif %}
+        <a class="list-item list-action bold-text" href="{% url 'employee:employee_home' %}">Employees</a>
+        <a class="list-item list-action bold-text" href="{% url 'survey:survey_home' %}">Survey QA</a>
+        <a class="list-item list-action d-flex align-items-center bold-text" href="{% url 'scheduler:scheduler_survey' %}">Schedule Survey</a>
+        <a class="list-item list-action d-flex align-items-center bold-text" href="{% url 'scheduler:scheduler_curriculum' %}">Schedule Curriculum</a>
+    </div>
+
+    <footer>
+        <span class="ver-tag">version 2.0.0</span>
+    </footer>
+</div>

@@ -1,0 +1,15 @@
+venv
+.venv
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+migrations/
+*.ini
+.env
+demo
+.coverage
+db-walnut/
+media/
+db-walnut/
+static-prod/
+logs/

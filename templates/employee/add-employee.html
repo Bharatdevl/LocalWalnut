@@ -1,0 +1,88 @@
+{% extends 'layouts/dashboard.html' %}
+{% block main_content %}
+<div class="page-wrap">
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <div id="page-content-wrap">
+        <!-- Header -->
+        <div id="header"></div>
+
+        <!-- Main page content -->
+        <div class="main-wrap">
+            <!-- <div class="top-btn">
+                <button class="btn back-btn">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back
+                </button>
+            </div> -->
+            {% include 'includes/messages.html' %}
+
+            <div class="container-fluid">
+                <div class="col-12 col-xl-11">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Employee Details </h2>
+                            <form method="post" action="{% url 'employee:add_emp' %}">
+                                {% csrf_token %}
+
+                                {% if form.non_field_errors %}
+                                    <ul class="errorlist">
+                                        {% for error in form.non_field_errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                <div class="col-12 col-xl-8">
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="First Name" name="first_name" id="first_name" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="Last Name" name="last_name" id="last_name" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="Email" name="email" id="email" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <input type="number" placeholder="Phone Number" name="phone_number" id="phone_number" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="Department" name="department" id="department" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="Supervisor" name="supervisor" id="supervisor" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="Location" name="location" id="location" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 col-xl-3">
+                                            <div class="input-group">
+                                                <button class="btn btn-primary">Add Employee</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

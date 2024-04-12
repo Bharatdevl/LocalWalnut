@@ -1,0 +1,56 @@
+{% extends 'layouts/dashboard.html' %}
+{% load static %}
+{% block main_content %}
+<div class="page-wrap">
+    <div id="page-content-wrap">
+        <!-- Main page content -->
+        <div class="main-wrap">
+            <div class="container-fluid">
+                {% include 'includes/messages.html' %}
+                <div class="col-12 col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title fw-bold">Schedule {{schedular_type|capfirst}}</h2>
+                            <hr>
+                            <form method="post">
+                                 {% csrf_token %}
+                                <div class="col-12 col-md-8">
+                                    <div class="row">
+                                        <div class="col-12 col-md-10">
+                                            <label for="day-schedule">Schedule Day</label>
+                                            <div class="input-group">
+                                                <select id="day-schedule" class="form-select" name="weekday">
+                                                    <option selected>--</option>
+                                                    {% for day in weekdays %}
+                                                    <option value="{{day}}">{{day|capfirst}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-10">
+                                            <label for="time-schedule">Schedule Time</label>
+                                            <div class="input-group">
+                                                <select id="time-schedule" class="form-select" name="schedule_time">
+                                                    <option selected>--</option>
+                                                    {% for time in schedule_time_list %}
+                                                    <option value="{{time}}">{{time}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 col-xl-3">
+                                            <div class="input-group">
+                                                <button class="btn btn-primary">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

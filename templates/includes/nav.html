@@ -1,0 +1,37 @@
+{% load static %}
+<header class="head-wrap">
+    <nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2 menu-tab">
+                    <button class="btn menu-btn" id="sidebarOpen" onclick="showMenu()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div class="col-5 col-md-8">
+                    <h1 class="nav-title">{{title}}</h1>
+                </div>
+                <div class="col-5 col-md-4 pd-lft">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{%static 'images/user.png'%}" alt="user logo" />
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa-solid fa-gear"></i>
+                                    Settings</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'company:company_users_logout' %}">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

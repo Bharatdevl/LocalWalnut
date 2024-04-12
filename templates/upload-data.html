@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+<html lang="en">
+
+<head>
+
+    <!-- End Fontawesome Link -->
+</head>
+
+<body>
+
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <!-- <div class="top-btn">
+                    <button class="btn back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div> -->
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div class="card file-wrap">
+                            <div class="card-body">
+                                <h2 class="card-title">Upload File</h2>
+                                <form method="post" action="{%url 'employees:file_data'%}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="col-12 col-xl-6">
+                                        <div class="input-group">
+                                            <div class="custom-file-button">
+                                                <label class="input-group-text" for="inputGroupFile">Browse</label>
+                                                <input type="file" id="inputGroupFile" required  name="file" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="file-box">
+                                            <a class="list-item list-action" href="{%url 'download_sample'%}">Download sample employee datasheet</a>
+                                            <i class="fa-solid fa-download"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-5 col-xl-2">
+                                        <div class="input-group">
+                                            <button class="btn btn-primary">Add Now</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+
+</body>
+
+</html>
+{%endblock%}

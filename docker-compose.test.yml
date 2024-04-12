@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: walnutv2-test-db
+    environment:
+      - POSTGRES_DB=walnuteq
+      - POSTGRES_USER=walnut
+      - POSTGRES_PASSWORD=walnut@2024
+    ports:
+      - 8003:5432
+    restart: always
+    volumes:
+      - ./db-walnut:/var/lib/postgresql/data
+
+  webapp:
+    build: .
+    container_name: walnutv2-test-webapp
+    restart: on-failure
+    # ports:
+    #   - 8004:8000
+    depends_on:
+      - db
+      - redisdb
+    volumes:
+      - ./:/app/
+
+  redisdb:
+    image: redis:latest
+    container_name: walnutv2-redis-test-db
+    restart: always
+    # ports:
+    #   - 6379:6379
+
+  nginx:
+    build: ./nginx
+    container_name: walnutv2-test-nginx
+    restart: always
+    ports:
+      - 8004:80
+    depends_on:
+      - webapp
+    volumes:
+      - ./static-prod:/home/app/web/static-prod

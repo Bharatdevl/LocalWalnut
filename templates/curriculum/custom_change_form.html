@@ -1,0 +1,94 @@
+{% extends "admin/change_form.html" %}
+
+{% block content %}
+
+<style>
+
+.input-control {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.input-box{
+    display: grid;
+  grid-template-columns: 200px 200px;
+  margin-bottom: 15px;
+ align-items: center;
+}
+
+.input-select {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    -moz-padding-start: calc(0.75rem - 3px);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    height: 36px;
+    min-width: 214px;
+}
+
+</style>
+
+  <form method="post" >
+
+    {% csrf_token %}
+    <div class="input-box">
+        <label for="companies">Company</label>
+        <select class="input-select" id="companies" name="companies">
+          {% for company in companies %}
+            <option value="{{ company.id }}">{{ company.company_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+    <br>
+    {% for elm in curriculums %}
+    <div class="input-box">
+        <label class="form-label" for="custom_field">{{elm.curriculum_name}}</label>
+        <input class="input-control" type="text" id="{{elm.curriculum_name}}" name="{{elm.curriculum_name}}">
+    </div>
+    {% endfor %}
+
+    <input type="submit" value="Save">
+  </form>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const curriculumInputs = {};
+      const curriculumElements = document.querySelectorAll('input[type="text"]');
+      curriculumElements.forEach(function(element) {
+        curriculumInputs[element.id] = element.value;
+      });
+
+      const sortedCurriculums = Object.entries(curriculumInputs).sort(function(a, b) {
+        return parseInt(a[1]) - parseInt(b[1]);
+      });
+
+      console.log('Sorted Curriculums:');
+      sortedCurriculums.forEach(function(curriculum) {
+        console.log(curriculum[0] + ':', curriculum[1]);
+      });
+      this.submit();
+    });
+  </script>
+{% endblock %}

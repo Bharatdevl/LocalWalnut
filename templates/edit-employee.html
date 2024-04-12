@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+{%extends 'base.html'%}
+{%block content%}
+<html lang="en">
+
+<head>
+
+    <title>WalnutEQ</title>
+    <!-- Favicon -->
+
+    <!-- End Fontawesome Link -->
+</head>
+
+<body>
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <!-- <div class="top-btn">
+                    <button class="btn back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div> -->
+
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title">Edit Employees</h2>
+                                <form method="post">
+                                    <div class="col-12 col-xl-8">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">First Name</label>
+                                                    <input type="text" placeholder="Bella" name="first_name" value="{{emp_data.first_name|default_if_none:''}}"
+                                                        id="firstname" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Last Name</label>
+                                                    <input type="text" placeholder="Stone" name="last_name" value="{{emp_data.last_name|default_if_none:''}}"
+                                                        id="lastname" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Email</label>
+                                                    <input type="text" placeholder="abc@mail.com" name="email" id="email" value="{{emp_data.email}}"
+                                                        class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Phone Number</label>
+                                                    <input type="text" placeholder="9987654321" name="phone" value="{{emp_data.phone_number}}"
+                                                        id="phone" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Department</label>
+                                                    <input type="text" placeholder="IT" name="department" value="{{emp_data.department|default_if_none:''}}"
+                                                        id="department" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Job Title</label>
+                                                    <input type="text" placeholder="Developer"
+                                                        name="job_title" id="job title" value="{{emp_data.job_title|default_if_none:''}}"
+                                                        class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Country</label>
+                                                    <input type="text" placeholder="Kolkata" name="country" id="country"
+                                                           value ="{{ emp_data.country|default_if_none:''}}"
+                                                        class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Supervisor</label>
+                                                    <input type="text" placeholder="Jack" name="supervisor" value="{{emp_data.supervisor|default_if_none:''}}"
+                                                        id="supervisor" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Language</label>
+                                                    <input type="text" placeholder="English" name="language" value="{{emp_data.language|default_if_none:''}}"
+                                                        id="language" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-5 col-xl-5"><br><br><br><br><br><br>
+                                                <div class="form-group d-flex justify-content-between">
+                                                    <form action="{% url 'employees:edit_employee' emp_data.pk%}" method="post">
+                                                        {% csrf_token %}
+
+                                                    <button class="btn btn-primary me-3">Save</button></form>
+                                                    <a href="{% url 'employees:delete_employee' emp_data.pk %}" class="curs-point" data-bs-toggle="modal" data-bs-target="#deleteBackdrop" id="deleteButton{{emp_data.pk}}">
+                                                    <button type="button" class="btn btn-outline-secondary">Delete</button></a>
+                                                    {% include 'modal/link_emp_deleted_modal.html' %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+
+</body>
+
+</html>
+{% endblock %}

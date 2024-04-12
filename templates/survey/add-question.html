@@ -1,0 +1,40 @@
+{% extends 'layouts/dashboard.html' %}
+{% load static %}
+{% block main_content %}
+<div class="page-wrap">
+    <div id="page-content-wrap">
+        <!-- Main page content -->
+        <div class="main-wrap">
+            <div class="container-fluid">
+                {% include 'includes/messages.html' %}
+                <div class="col-12 col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title fw-bold">Add a survey question</h2>
+                            <hr>
+                            <form method="post" action="#">
+                                 {% csrf_token %}
+                                <div class="col-12 col-md-8">
+                                    <div class="row">
+                                        <div class="col-12 col-md-10">
+                                            <div class="input-group">
+                                                <textarea type="text" placeholder="Type your question here..." name="question"
+                                                    id="survey_question" class="form-control">{{ original_question }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 col-xl-3">
+                                            <div class="input-group">
+                                                <button class="btn btn-primary">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

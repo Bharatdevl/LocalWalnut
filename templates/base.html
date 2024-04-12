@@ -1,0 +1,66 @@
+{% load static %}
+<head>
+    {% include 'includes/head.html' %}
+</head>
+<header class="head-wrap">
+    <nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2 menu-tab">
+                    <button class="btn menu-btn" id="sidebarOpen" onclick="showMenu()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div class="col-5 col-md-8">
+                    <h1 class="nav-title">Dashboard</h1>
+                </div>
+                <div class="col-5 col-md-4 pd-lft">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{request.session.email}}
+                            <img src="{%static 'images/user.png'%}" alt="user logo" />
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa-solid fa-gear"></i>
+                                    Settings</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="side-card menu-trans" id="sidebar-wrapper">
+    <!-- <button class="btn menu-btn" onclick="closeMenu()">
+        <i class="fa-solid fa-xmark"></i>
+    </button> -->
+    <div class="side-icon">
+        <img class="s-logo" src="{%static 'images/SidebarLogo.png'%}" alt="logo" />
+    </div>
+    <div class="list-group">
+        {%block sidebar%}
+        <a class="list-item list-action" href="{% url 'entity_users:client_welcome' %}">Home</a>
+        {% if request.session.parent_user == None %}
+        <a class="list-item list-action" href="{% url 'entity_users:client_user1' %}">Add User</a>
+        {% endif %}
+         <a class="list-item list-action" href="{% url 'employees:view_employee' %}">Employees</a>
+<!--        <a class="list-item list-action" href="{% url 'employees:upload_files' %}">Upload Data</a>-->
+        <a class="list-item list-action" href="{% url 'surveyqas:survey_qa' %}">Survey Question</a>
+        <!-- <a class="list-item list-action" href="{% url 'surveyqas:sendsms' %}">Quick Send</a> -->
+        <a class="list-item list-action" href="{% url 'schedulesms:schedule_save' %}">Schedulars</a>
+        <!-- <a class="list-item list-action" href="{% url 'curriculum_app:curriculum_save' %}">Schedule Curriculum</a> -->
+        {%endblock%}
+    </div>
+</div>
+{% include 'includes/messages.html' %}
+{% block content %}
+{% endblock %}

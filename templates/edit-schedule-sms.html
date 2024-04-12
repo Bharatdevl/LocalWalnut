@@ -1,0 +1,92 @@
+{% extends 'layouts/dashboard.html' %}
+{% load static %}
+{% block main_content %}
+<body>
+    <div class="page-wrap">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <div id="page-content-wrap">
+            <!-- Header -->
+            <div id="header"></div>
+
+            <!-- Main page content -->
+            <div class="main-wrap">
+                <!-- <div class="top-btn">
+                    <button class="btn back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div> -->
+                {% include 'includes/messages.html' %}
+
+                <div class="container-fluid">
+                    <div class="col-12 col-xl-11">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title">Edit Schedule SMS</h2>
+                                <form method="post">
+                                    <div class="col-12 col-xl-8">
+                                        <div class="row">
+                                            <div class="col-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">Weekday</label>
+                                                    <select class="form-select" name="weekday">
+                                                        <option selected value="{{schedule_obj.weekday}}">{{schedule_obj.weekday|capfirst}}</option>
+                                                        <option value="sunday">Sunday</option>
+                                                        <option value="monday">Monday</option>
+                                                        <option value="tuesday">Tuesday</option>
+                                                        <option value="wednesday">Wednesday</option>
+                                                        <option value="thursday">Thursday</option>
+                                                        <option value="friday">Friday</option>
+                                                        <option value="saturday">Saturday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">Time</label>
+                                                    {% with selected_value=schedule_obj.schedule_time|date:'g:i A' %}
+                                                    <select class="form-select" name="schedule_time">
+                                                        <option value="8:00 AM" {% if selected_value == "8:00 AM" %}selected{% endif %}>8:00 AM</option>
+                                                        <option value="9:00 AM" {% if selected_value == "9:00 AM" %}selected{% endif %}>9:00 AM</option>
+                                                        <option value="10:00 AM" {% if selected_value == "10:00 AM" %}selected{% endif %}>10:00 AM</option>
+                                                        <option value="11:00 AM" {% if selected_value == "11:00 AM" %}selected{% endif %}>11:00 AM</option>
+                                                        <option value="12:00 PM" {% if selected_value == "12:00 PM" %}selected{% endif %}>12:00 PM</option>
+                                                        <option value="1:00 PM" {% if selected_value == "1:00 PM" %}selected{% endif %}>1:00 PM</option>
+                                                        <option value="2:00 PM" {% if selected_value == "2:00 PM" %}selected{% endif %}>2:00 PM</option>
+                                                        <option value="3:00 PM" {% if selected_value == "3:00 PM" %}selected{% endif %}>3:00 PM</option>
+                                                        <option value="4:00 PM" {% if selected_value == "4:00 PM" %}selected{% endif %}>4:00 PM</option>
+                                                        <option value="5:00 PM" {% if selected_value == "5:00 PM" %}selected{% endif %}>5:00 PM</option>
+                                                        <option value="6:00 PM" {% if selected_value == "6:00 PM" %}selected{% endif %}>6:00 PM</option>
+                                                        <option value="7:00 PM" {% if selected_value == "7:00 PM" %}selected{% endif %}>7:00 PM</option>
+                                                        <option value="8:00 PM" {% if selected_value == "8:00 PM" %}selected{% endif %}>8:00 PM</option>
+                                                    </select>
+                                                    {% endwith %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5 col-xl-3">
+                                            <div class="form-group d-flex justify-content-between">
+                                                    <form action="{% url 'scheduler:edit_survey' schedule_obj.id%}" method="post">
+                                                        {% csrf_token %}
+                                                    <input type="hidden" name="referrer_url" value="{{ referrer_url }}">
+                                                    <button class="btn btn-primary me-3">Save</button></form>
+                                                    <a href="{% url 'scheduler:delete_survey' pk=schedule_obj.pk %}?referrer={{ referrer_url }}" class="curs-point" data-bs-toggle="modal" data-bs-target="#deleteSurveyBackdrop" id="deleteSurveyBackdrop{{schedule_obj.pk}}">
+                                                    <button type="button" class="btn btn-outline-danger">Delete</button></a>
+                                                    {% include 'modal/link_emp_deleted_modal.html' with modal_id='deleteSurveyBackdrop' %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+{% endblock main_content %}
